@@ -1,0 +1,74 @@
+
+<h2>gmap</h2>
+
+<input id="address" type="textbox" value="GeekSalon">
+<input type="button" value="Encode" onclick="codeAddress()">
+<div id="display">何かが表示される、、、、！</div>
+<div id="target_latitude">いど！</div>
+<div id="target_longtitude">けいど！</div>
+
+<div id='map'></div>
+
+<style>
+#map {
+  height: 600px;
+  width: 600px;
+}
+</style>
+
+<script>
+let map
+let geocoder
+
+const display = document.getElementById('display')
+var marker;
+
+function initMap(){
+  geocoder = new google.maps.Geocoder()
+
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 35.0079, lng:135.7704},
+    zoom: 16,
+  });
+
+  // ドラッグ可能なマーカー
+  marker = new google.maps.Marker({
+    position:  {lat: 35.0079, lng:135.7704},
+    map: map,
+    draggable: true
+  });
+ //マーカーのドロップ（ドラッグ終了）時のイベント
+ google.maps.event.addListener(marker, 'dragend', function(e) {
+  //イベントの引数eの、プロパティ.latLngがmarkerの緯度経度。
+  document.getElementById('target_latitude').textContent = e.latLng.lat(),
+  document.getElementById('target_longtitude').textContent = e.latLng.lng()
+ });
+}
+
+function codeAddress(){
+  let inputAddress = document.getElementById('address').value;
+
+  marker.setMap(null);
+  geocoder.geocode( { 'address': inputAddress}, function(results, status) {
+    if (status == 'OK') {
+      map.setCenter(results[0].geometry.location);
+      marker = new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location,
+          draggable: true
+      });
+      display.textContent = "検索結果：" + results[ 0 ].geometry.location
+    } else {
+      alert('該当する結果がありませんでした：' + status);
+    }
+ //マーカーのドロップ（ドラッグ終了）時のイベント
+ google.maps.event.addListener(marker, 'dragend', function(e) {
+  //イベントの引数eの、プロパティ.latLngがmarkerの緯度経度。
+  document.getElementById('target_latitude').textContent = e.latLng.lat(),
+  document.getElementById('target_longtitude').textContent = e.latLng.lng()
+ });
+  });   
+}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= @env %>&callback=initMap" async defer></script>
