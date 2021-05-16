@@ -43,6 +43,19 @@ function initMap(){
   document.getElementById('target_latitude').textContent = e.latLng.lat(),
   document.getElementById('target_longtitude').textContent = e.latLng.lng()
  });
+
+
+             // infoWindowは吹き出し
+            infoWindow = new google.maps.InfoWindow({
+            // contentで中身を指定
+            // 今回は文字にリンクを貼り付けた形で表示
+            content: `<a href='/pages/index'>リンクです！</a>`
+            });
+            // markerがクリックされた時、
+            marker.addListener("click", function(){
+                // infoWindowを表示
+                infoWindow.open(map, marker);
+            });
 }
 
 function codeAddress(){
@@ -67,8 +80,21 @@ function codeAddress(){
   document.getElementById('target_latitude').textContent = e.latLng.lat(),
   document.getElementById('target_longtitude').textContent = e.latLng.lng()
  });
-  });   
+  });
+
+             // infoWindowは吹き出し
+            infoWindow = new google.maps.InfoWindow({
+            // contentで中身を指定
+            // 今回は文字にリンクを貼り付けた形で表示
+            content: `<a href='/pages/index'>リンクです！</a>`
+            });
+            // markerがクリックされた時、
+            marker.addListener("click", function(){
+                // infoWindowを表示
+                infoWindow.open(map, marker);
+            });
 }
+
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=<%= @env %>&callback=initMap" async defer></script>
